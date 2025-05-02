@@ -1,0 +1,17 @@
+.btn {
+    background-color: #2A9D8F; /* Verde esmeralda */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #A8DADC; /* Azul claro */
+    color: #264653; /* Azul profundo */
+  }
+  
