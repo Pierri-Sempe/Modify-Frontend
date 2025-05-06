@@ -1,0 +1,51 @@
+body {
+    background-color: #264653; /* Azul profundo */
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container, .signup-container {
+    background-color: #1E3A8A; /* Azul medianoche */
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+}
+
+.login-title, .signup-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #C1E8E3; /* Celeste pálido */
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    background: #E9C46A; /* Arena cálida */
+    font-size: 16px;
+    color: #264653; /* Azul profundo */
+}
+
+.login-button, .signup-button {
+    width: 100%;
+    padding: 10px;
+    background: #2A9D8F; /* Verde esmeralda */
+    color: white;
+    border: none;
+    font-size: 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.login-button:hover, .signup-button:hover {
+    background: #A8DADC; /* Azul claro */
+}

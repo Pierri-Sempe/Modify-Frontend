@@ -1,7 +1,7 @@
-import './Home.css';
+import '../CSS/Home.css';
 import React from 'react';
-import LoginButton from '../components/LoginButton';
-import GetStartedButton from '../components/GetStartedButton';
+import LoginButton from '../../components/LoginButton';
+import GetStartedButton from '../../components/GetStartedButton';
 
 export default function Home() {
   return (
