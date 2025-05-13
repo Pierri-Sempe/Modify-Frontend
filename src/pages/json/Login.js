@@ -22,9 +22,9 @@ export default function Login() {
       const data = await response.json();
   
       if (response.ok) {
-        // 👉 Aquí guardamos el nombre de usuario en localStorage
-        localStorage.setItem('user', JSON.stringify(data.username));
-        alert(`¡Bienvenido, ${data.username}!`);
+        // Aquí guardamos el nombre de usuario en localStorage
+        localStorage.setItem('user', JSON.stringify(data.user));
+        alert(`¡Bienvenido, ${data.user.username}!`);
         navigate('/menu');
       } else {
         alert(data.error || 'Error al iniciar sesión');
