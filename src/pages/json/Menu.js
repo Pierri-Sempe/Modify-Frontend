@@ -1,0 +1,149 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../CSS/Menu.css';
+
+export default function Menu() {
+  const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = useRef(null);
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [navigate, user]);
+
+  // Maneja selección de imagen
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setSelectedImage(file);
+    } else {
+      alert('Por favor selecciona un archivo de imagen válido.');
+    }
+  };
+
+  // Abre el selector de archivos
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
+  };
+
+  // Realiza el análisis con AWS Rekognition a través del backend
+  const handleSearch = async () => {
+    if (!selectedImage) {
+      return alert('Primero selecciona una imagen.');
+    }
+
+    // Creamos un FormData y agregamos la imagen
+    const formData = new FormData();
+    formData.append('image', selectedImage);
+
+    try {
+      // Llamada al endpoint /api/emotion/analyze
+      const response = await fetch('http://localhost:5000/api/emotion/analyze', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        return alert(data.error || 'Error al analizar la imagen.');
+      }
+
+      // data.emotions es un arreglo de emociones detectadas, por ejemplo: ["Happy", "Surprised"]
+      console.log('Emociones detectadas:', data.emotions);
+
+      // Convertimos la imagen a URL para mostrarla en Busqueda.js
+      const imageUrl = URL.createObjectURL(selectedImage);
+
+      // Guardamos el resultado del análisis en localStorage para usarlo en /busqueda
+      localStorage.setItem('analysisResult', JSON.stringify({
+        imageUrl,
+        emotions: data.emotions
+      }));
+
+      // Luego, consultamos las canciones recomendadas (desde el backend)
+      // Se espera que el endpoint /api/emotion/songs ya esté configurado
+      const songsResponse = await fetch('http://localhost:5000/api/emotion/songs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emotions: data.emotions })
+      });
+
+      const songsData = await songsResponse.json();
+      if (!songsResponse.ok) {
+        return alert(songsData.error || 'Error al obtener recomendaciones.');
+      }
+      
+      // Opcional: Puedes almacenar también las canciones en localStorage si lo deseas
+      localStorage.setItem('recommendedSongs', JSON.stringify(songsData.songs));
+
+      // Finalmente, redirigimos a la página /busqueda
+      navigate('/busqueda');
+
+      // Si deseas guardar el análisis en historial, puedes llamarlo aquí.
+      // Por ejemplo, podrías hacer una llamada al endpoint `/api/emotion/save`
+      // pasando la imagen, user.id, emociones y el id de las canciones.
+      // Eso lo haremos en el endpoint /api/emotion/save en el backend.
+    } catch (error) {
+      console.error('Error al conectar con el servidor:', error);
+      alert('Error al conectar con el servidor');
+    }
+  };
+
+  return (
+    <div className="menu-wrapper">
+      <div className="topbar">
+        <button className="logout-button" onClick={() => {
+          localStorage.removeItem('user');
+          navigate('/login');
+        }}>Logout</button>
+      </div>
+
+      <div className="menu-content">
+        <aside className="sidebar">
+          <h2>Moodify</h2>
+          <nav>
+            <ul>
+              {/* Usa <Link> si prefieres navegación SPA */}
+              <li><a href="/menu">Home</a></li>
+              <li><a href="/recomendaciones">Recomendación</a></li>
+              <li><a href="/historial">Historial</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <main className="main-section">
+          <div className="left-panel">
+            <h2>Sincronízate con tus emociones</h2>
+            <p>Selecciona una foto o imagen</p>
+            <button className="upload-btn" onClick={triggerFileInput}>📤 Subir Imagen</button>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+            />
+            <div className="image-preview">
+              {selectedImage ? (
+                <img src={URL.createObjectURL(selectedImage)} alt="Vista previa" />
+              ) : (
+                'No hay imagen seleccionada'
+              )}
+            </div>
+            <button className="search-button" onClick={handleSearch}>
+              🔍 Realizar búsqueda
+            </button>
+          </div>
+
+          {/* Aquí podrías tener otra sección para dashboard, etc. */}
+          <div className="right-panel">
+            {/* Puedes dejar este panel vacío o mostrar información adicional */}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}

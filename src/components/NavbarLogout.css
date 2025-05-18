@@ -1,0 +1,20 @@
+.navbar-logout {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 2rem;
+  background-color: #264653; /* Azul profundo */
+}
+
+.logout-button {
+  background-color: #E76F51; /* Rojo suave */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #D64B3A;
+}
