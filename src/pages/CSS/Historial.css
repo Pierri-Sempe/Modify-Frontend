@@ -1,0 +1,138 @@
+.historial-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #264653; /* Fondo principal */
+  color: white;
+}
+
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  background-color: #1E3A8A; /* Azul medianoche */
+}
+
+.logout-button {
+  background-color: #E9C46A; /* Arena cálida */
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-button:hover {
+  background-color: #A8DADC; /* Hover */
+}
+
+.menu-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #1E3A8A;
+  padding: 1rem;
+}
+
+.sidebar h2 {
+  color: #C1E8E3;
+  margin-bottom: 1rem;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar nav ul li {
+  margin: 10px 0;
+}
+
+.sidebar nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.main-section {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.filtro-section {
+  margin-bottom: 1rem;
+}
+
+.filtro-section button {
+  margin: 0.2rem;
+  background-color: #E9C46A;
+  color: #264653;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.filtro-section button.active {
+  background-color: #2A9D8F;
+  color: white;
+}
+
+.filtro-section button:hover {
+  background-color: #A8DADC;
+}
+
+.historial-entry {
+  background-color: #3B6064; /* gris azulado */
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.historial-entry p {
+  margin: 0;
+}
+
+.historial-entry ul {
+  list-style: none;
+  padding-left: 1rem;
+}
+
+.historial-entry li {
+  margin-bottom: 5px;
+}
+
+.pagination {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.pagination button {
+  margin: 0 5px;
+  background-color: #E9C46A;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #2A9D8F;
+  color: white;
+}
+
+.pagination button:hover {
+  background-color: #A8DADC;
+}

@@ -120,3 +120,21 @@ body {
   margin: 10px 0;
   border-radius: 10px;
 }
+
+.dashboard {
+  margin-top: 40px;
+  background: #1E3A8A;
+  padding: 20px;
+  border-radius: 15px;
+  color: white;
+}
+
+.dashboard p {
+  margin: 10px 0;
+}
+
+.recharts-wrapper {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+}

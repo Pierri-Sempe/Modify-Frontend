@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import '../CSS/Menu.css';
 
 export default function Menu() {
@@ -7,12 +8,23 @@ export default function Menu() {
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const user = JSON.parse(localStorage.getItem('user'));
+  const [dashboardData, setDashboardData] = useState(null);
+
 
   useEffect(() => {
     if (!user) {
       navigate('/login');
     }
   }, [navigate, user]);
+
+  useEffect(() => {
+  if (user) {
+    fetch(`http://localhost:5000/api/emotion/dashboard/${user.id}`)
+      .then(res => res.json())
+      .then(data => setDashboardData(data))
+      .catch(err => console.error('Error al cargar estadísticas:', err));
+  }
+}, [user]);
 
   // Maneja selección de imagen
   const handleFileChange = (e) => {
@@ -138,12 +150,52 @@ export default function Menu() {
             </button>
           </div>
 
-          {/* Aquí podrías tener otra sección para dashboard, etc. */}
           <div className="right-panel">
-            {/* Puedes dejar este panel vacío o mostrar información adicional */}
-          </div>
+  {dashboardData && (
+    <section className="dashboard">
+      <h2>Dashboard personal</h2>
+      <p>Tus emociones de la semana:</p>
+
+      <ResponsiveContainer width="100%" height={250}>
+        <BarChart data={Object.entries(dashboardData.porSemana).map(([emocion, cantidad]) => ({ emocion, cantidad }))}>
+          <XAxis dataKey="emocion" />
+          <YAxis />
+          <Tooltip />
+          <Bar dataKey="cantidad" fill="#2A9D8F" />
+        </BarChart>
+      </ResponsiveContainer>
+
+      <p>Distribución por emociones este mes:</p>
+
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
+          <Pie
+            data={Object.entries(dashboardData.porMes).map(([emocion, cantidad]) => ({ name: emocion, value: cantidad }))}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={90}
+            fill="#8884d8"
+            label
+          >
+            {Object.entries(dashboardData.porMes).map(([_, __], index) => (
+              <Cell key={index} fill={["#2A9D8F", "#E9C46A", "#F4A261", "#E76F51", "#264653", "#A8DADC", "#C1E8E3", "#FFB4A2", "#B5EAD7"][index % 9]} />
+            ))}
+          </Pie>
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
+
+      <p><strong>Total de análisis realizados:</strong> {dashboardData.total}</p>
+    </section>
+  )}
+</div>
+
         </main>
       </div>
     </div>
   );
+
+
 }
