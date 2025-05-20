@@ -74,7 +74,7 @@ if (!storedUser || !storedUser.id) {
 
   const handleNewRecommendations = () => {
     if (emotions.length && userId) {
-      fetchSongsAndSave(emotions, userId, false);
+      fetchSongsAndSave(emotions, userId, true);
     }
   };
 
@@ -98,7 +98,7 @@ if (!storedUser || !storedUser.id) {
           <nav>
             <ul>
               <li><Link to="/menu">Home</Link></li>
-              <li><Link to="/recomendaciones">Recomendación</Link></li>
+              <li><Link to="/busqueda">Recomendación</Link></li>
               <li><Link to="/historial">Historial</Link></li>
             </ul>
           </nav>
