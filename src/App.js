@@ -6,6 +6,7 @@ import Signup from './pages/json/Signup';
 import Menu from './pages/json/Menu';
 import Busqueda from './pages/json/Busqueda';
 import Historial from './pages/json/Historial';
+require("./instrument.js");
 
 
 function App() {

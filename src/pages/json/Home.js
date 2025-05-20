@@ -8,12 +8,15 @@ export default function Home() {
     <div className="home-container">
       <LoginButton />
       <main className="main-content">
-        <h1 className="title">Moodify</h1>
-        <p className="subtitle">
-          Discover the perfect melody for every emotion and let the music speak for you
-        </p>
-        <GetStartedButton />
-      </main>
+  <div className="logo-container">
+    <img src="/logo-moodify.png" alt="Logo Moodify" className="logo-background" />
+  </div>
+  <h1 className="title">Moodify</h1>
+  <p className="subtitle">
+    Discover the perfect melody for every emotion and let the music speak for you
+  </p>
+  <GetStartedButton />
+</main>
     </div>
   );
 }

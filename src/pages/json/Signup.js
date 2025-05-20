@@ -17,14 +17,14 @@ export default function Signup() {
       const response = await fetch('http://localhost:5000/api/users/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, username, password }) // ✅ CAMBIO AQUÍ
+        body: JSON.stringify({ email, username, password }) 
       });
 
       const data = await response.json();
 
       if (response.ok) {
         alert('¡Registro exitoso!');
-        navigate('/menu');
+        navigate('/');
       } else {
         alert(data.error || 'Error al registrar');
       }

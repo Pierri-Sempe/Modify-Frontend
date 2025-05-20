@@ -120,7 +120,7 @@ export default function Menu() {
             <ul>
               {/* Usa <Link> si prefieres navegación SPA */}
               <li><a href="/menu">Home</a></li>
-              <li><a href="/recomendaciones">Recomendación</a></li>
+              <li><a href="/busqueda">Recomendación</a></li>
               <li><a href="/historial">Historial</a></li>
             </ul>
           </nav>
@@ -138,7 +138,7 @@ export default function Menu() {
               onChange={handleFileChange}
               style={{ display: 'none' }}
             />
-            <div className="image-preview">
+            <div className="image-preview" >
               {selectedImage ? (
                 <img src={URL.createObjectURL(selectedImage)} alt="Vista previa" />
               ) : (
@@ -152,45 +152,58 @@ export default function Menu() {
 
           <div className="right-panel">
   {dashboardData && (
-    <section className="dashboard">
-      <h2>Dashboard personal</h2>
-      <p>Tus emociones de la semana:</p>
+    <section className="dashboard-section">
+      <h2 className="dashboard-title">📊 Dashboard personal</h2>
 
-      <ResponsiveContainer width="100%" height={250}>
-        <BarChart data={Object.entries(dashboardData.porSemana).map(([emocion, cantidad]) => ({ emocion, cantidad }))}>
-          <XAxis dataKey="emocion" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="cantidad" fill="#2A9D8F" />
-        </BarChart>
-      </ResponsiveContainer>
-
-      <p>Distribución por emociones este mes:</p>
-
-      <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
-          <Pie
-            data={Object.entries(dashboardData.porMes).map(([emocion, cantidad]) => ({ name: emocion, value: cantidad }))}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={90}
-            fill="#8884d8"
-            label
+      <div className="chart-block">
+        <p className="chart-label">Tus emociones esta semana:</p>
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart
+            data={Object.entries(dashboardData.porSemana).map(([emocion, cantidad]) => ({ emocion, cantidad }))}
+            margin={{ top: 20, right: 20, left: 0, bottom: 5 }}
           >
-            {Object.entries(dashboardData.porMes).map(([_, __], index) => (
-              <Cell key={index} fill={["#2A9D8F", "#E9C46A", "#F4A261", "#E76F51", "#264653", "#A8DADC", "#C1E8E3", "#FFB4A2", "#B5EAD7"][index % 9]} />
-            ))}
-          </Pie>
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
+            <XAxis dataKey="emocion" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Bar dataKey="cantidad" fill="#2A9D8F" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
 
-      <p><strong>Total de análisis realizados:</strong> {dashboardData.total}</p>
+      <div className="chart-block">
+        <p className="chart-label">Distribución por emociones este mes:</p>
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={Object.entries(dashboardData.porMes).map(([emocion, cantidad]) => ({ name: emocion, value: cantidad }))}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={90}
+              fill="#8884d8"
+              label
+            >
+              {Object.entries(dashboardData.porMes).map(([_, __], index) => (
+                <Cell
+                  key={index}
+                  fill={[
+                    "#2A9D8F", "#E9C46A", "#F4A261", "#E76F51",
+                    "#264653", "#A8DADC", "#C1E8E3", "#FFB4A2", "#B5EAD7"
+                  ][index % 9]}
+                />
+              ))}
+            </Pie>
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      <p className="total-count">Total de análisis realizados: <strong>{dashboardData.total}</strong></p>
     </section>
   )}
 </div>
+
 
         </main>
       </div>

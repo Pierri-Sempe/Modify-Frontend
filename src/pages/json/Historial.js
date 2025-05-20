@@ -15,7 +15,7 @@ export default function Historial() {
   const [totalPaginas, setTotalPaginas] = useState(1);
 
   useEffect(() => {
-    if (!user) return navigate('/login');
+    if (!user) return navigate('/');
 
     const query = new URLSearchParams({
       user_id: user.id,
@@ -46,7 +46,7 @@ export default function Historial() {
       <div className="topbar">
         <button className="logout-button" onClick={() => {
           localStorage.removeItem('user');
-          navigate('/login');
+          navigate('/');
         }}>Logout</button>
       </div>
 
@@ -56,7 +56,7 @@ export default function Historial() {
           <nav>
             <ul>
               <li><a href="/menu">Home</a></li>
-              <li><a href="/recomendaciones">Recomendación</a></li>
+              <li><a href="/busqueda">Recomendación</a></li>
               <li><a href="/historial">Historial</a></li>
             </ul>
           </nav>

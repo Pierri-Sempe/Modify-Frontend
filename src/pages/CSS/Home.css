@@ -1,11 +1,13 @@
 body {
-    background-color: #264653; /* Azul profundo */
-    color: white;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
+  background: linear-gradient(-45deg, #051f29, #1a565e, #315d6e, #5f9fa7);
+  background-size: 400% 400%;
+  animation: fondoAnimado 10s ease infinite;
+  color: white;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
   .home-container {
     position:static;
     min-height: 100vh;
@@ -31,10 +33,30 @@ body {
   }
   
 
-.title {
-    font-size: 72px;
-    font-weight: bold;
+.logo-container {
+  position: relative;
+  width: 100%;
+  height: 120px; /* ajusta la altura según el tamaño del logo */
+  margin-bottom: -60px; /* sube el título encima del logo */
 }
+
+.logo-background {
+  position: absolute;
+  top: -100px; /* ajusta según el diseño */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 1;
+  height: 350px; /* o usa width si prefieres */
+  z-index: 0;
+}
+
+.title {
+  font-size: 72px;
+  font-weight: bold;
+  position: relative;
+  z-index: 1; /* para que quede por encima del logo */
+}
+
 
 .subtitle {
     font-size: 18px;
@@ -55,4 +77,17 @@ body {
 
 .btn:hover {
     background-color: #A8DADC; /* Azul claro */
+}
+
+
+@keyframes fondoAnimado {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

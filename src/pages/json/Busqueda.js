@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../CSS/Menu.css'; // Estilos reutilizados
 
@@ -8,31 +8,9 @@ export default function Busqueda() {
   const [emotions, setEmotions] = useState([]);
   const [songs, setSongs] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [guardado, setGuardado] = useState(false);
 
-  useEffect(() => {
-    const storedAnalysis = JSON.parse(localStorage.getItem('analysisResult'));
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-
-    if (!storedAnalysis || !storedAnalysis.imageUrl || !storedAnalysis.emotions) {
-      alert('Primero realiza una búsqueda');
-      navigate('/menu');
-      return;
-    }
-
-    if (!storedUser || !storedUser.id) {
-      alert('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigate('/login');
-      return;
-    }
-
-    setImageUrl(storedAnalysis.imageUrl);
-    setEmotions(storedAnalysis.emotions);
-    setUserId(storedUser.id);
-
-    fetchSongsAndSave(storedAnalysis.emotions, storedUser.id);
-  }, []);
-
-  const fetchSongsAndSave = async (emotionsList, userId) => {
+  const fetchSongsAndSave = useCallback(async (emotionsList, userId, debeGuardar = false) => {
     try {
       const response = await fetch('http://localhost:5000/api/emotion/songs', {
         method: 'POST',
@@ -45,19 +23,23 @@ export default function Busqueda() {
       if (response.ok) {
         setSongs(data.songs);
 
-        // Guardar en historial (sin imagen real, solo referencia simbólica)
-        const formData = new FormData();
-        const fakeImage = new Blob([''], { type: 'image/jpeg' });
+        if (debeGuardar && !guardado) {
+          const formData = new FormData();
+          const fakeImage = new Blob([''], { type: 'image/jpeg' });
 
-        formData.append('image', fakeImage, 'placeholder.jpg');
-        formData.append('user_id', userId);
-        formData.append('emotions', JSON.stringify(emotionsList));
-        formData.append('songs', JSON.stringify(data.songs.map(s => s.id)));
+          formData.append('image', fakeImage, 'placeholder.jpg');
+          formData.append('user_id', userId);
+          formData.append('emotions', JSON.stringify(emotionsList));
+          formData.append('songs', JSON.stringify(data.songs.map(s => s.id)));
 
-        await fetch('http://localhost:5000/api/emotion/save', {
-          method: 'POST',
-          body: formData
-        });
+          await fetch('http://localhost:5000/api/emotion/save', {
+            method: 'POST',
+            body: formData
+          });
+
+          localStorage.removeItem('analysisResult'); // limpiar después de guardar
+          setGuardado(true);
+        }
       } else {
         alert('No se pudieron obtener canciones');
       }
@@ -65,11 +47,34 @@ export default function Busqueda() {
       console.error('Error al obtener canciones o guardar historial:', error);
       alert('Error al conectar con el servidor');
     }
-  };
+  }, [guardado]);
+
+  useEffect(() => {
+    const storedAnalysis = JSON.parse(localStorage.getItem('analysisResult'));
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+
+    if (!storedAnalysis || !storedAnalysis.imageUrl || !storedAnalysis.emotions) {
+  console.warn('No hay datos de análisis, redirigiendo al menú');
+
+  return;
+}
+
+if (!storedUser || !storedUser.id) {
+  console.warn('Sesión expirada, redirigiendo al login');
+  navigate('/login');
+  return;
+}
+
+    setImageUrl(storedAnalysis.imageUrl);
+    setEmotions(storedAnalysis.emotions);
+    setUserId(storedUser.id);
+
+    fetchSongsAndSave(storedAnalysis.emotions, storedUser.id, true);
+  }, [fetchSongsAndSave, navigate]);
 
   const handleNewRecommendations = () => {
     if (emotions.length && userId) {
-      fetchSongsAndSave(emotions, userId);
+      fetchSongsAndSave(emotions, userId, false);
     }
   };
 
@@ -100,7 +105,6 @@ export default function Busqueda() {
         </aside>
 
         <main className="main-section">
-          {/* Izquierda: imagen y emociones */}
           <div className="left-panel">
             <h2>Resultado de análisis</h2>
             <p>Emociones detectadas: {emotions.join(', ')}</p>
@@ -109,7 +113,6 @@ export default function Busqueda() {
             </div>
           </div>
 
-          {/* Derecha: canciones */}
           <div className="right-panel">
             <h2>Canciones recomendadas</h2>
             <button onClick={handleNewRecommendations} className="search-button">
